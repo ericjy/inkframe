@@ -1,57 +1,53 @@
 import { Command } from "commander";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { InkframeClient } from "./client.js";
 
-const DEFAULT_BASE_URL = "https://smarkly.com";
+declare const __CLI_VERSION__: string;
+import { writeFileSync } from "fs";
+import { InkframeClient, DEFAULT_BASE_URL } from "./client.js";
+import { readArg, readDesignArg } from "./args.js";
 
-function getApiKey(): string {
-  const key = process.env.INKFRAME_API_KEY;
-  if (!key) {
-    console.error("Error: INKFRAME_API_KEY environment variable is not set");
-    process.exit(1);
-  }
-  return key;
+function getApiKey(): string | undefined {
+  return process.env.INKFRAME_API_KEY;
 }
 
-function readContentArg(value: string): string {
-  if (existsSync(value)) {
-    return readFileSync(value, "utf-8");
-  }
-  return value;
-}
-
-function readDesignArg(value: string): object {
-  if (existsSync(value)) {
-    return JSON.parse(readFileSync(value, "utf-8"));
-  }
-  try {
-    return JSON.parse(value);
-  } catch {
-    console.error("Error: --design must be a valid JSON string or path to a JSON file");
-    process.exit(1);
-  }
-}
 
 const program = new Command();
 
 program
   .name("inkframe")
   .description("Render beautiful visual images from markdown content")
-  .version("0.1.0");
+  .version(__CLI_VERSION__);
 
 program
   .command("render")
   .description("Render an image from markdown content")
-  .requiredOption("-c, --content <content>", "Markdown content or path to a .md file")
-  .option("-d, --design <design>", "Design JSON string or path to a JSON file")
+  .option("-c, --content <content>", "Inline markdown or @file.md to read from a file")
+  .option("-t, --template <templateId>", "Template ID to use as the design")
+  .option("-d, --design <design>", "Inline design JSON or @file.json (overrides --template)")
   .option("-o, --output <output>", "Save image to file (e.g. out.png). Prints URL if omitted.")
   .option("-s, --scale <scale>", "Scale factor: 1, 2, or 3", "2")
   .option("-f, --file-type <fileType>", "Output format: png, jpeg, webp", "png")
   .option("--base-url <baseUrl>", "API base URL", DEFAULT_BASE_URL)
   .action(async (options) => {
     const client = new InkframeClient({ apiKey: getApiKey(), baseUrl: options.baseUrl });
-    const content = readContentArg(options.content);
-    const design = options.design ? readDesignArg(options.design) : undefined;
+    let content = options.content ? readArg(options.content) : undefined;
+
+    let design = options.design ? readDesignArg(options.design) : undefined;
+
+    if (options.template) {
+      const templates = await client.listTemplates();
+      const template = templates.find((t) => t.id === options.template);
+      if (!template) {
+        console.error(`Error: Template "${options.template}" not found`);
+        process.exit(1);
+      }
+      if (!design) design = template.design;
+      if (!content) content = template.content;
+    }
+
+    if (!content) {
+      console.error("Error: --content is required when --template is not specified");
+      process.exit(1);
+    }
 
     try {
       const result = await client.render({
@@ -75,8 +71,12 @@ program
     }
   });
 
-program
+const templatesCmd = program
   .command("templates")
+  .description("Manage templates");
+
+templatesCmd
+  .command("list")
   .description("List available templates")
   .option("--base-url <baseUrl>", "API base URL", DEFAULT_BASE_URL)
   .action(async (options) => {
@@ -89,8 +89,38 @@ program
         return;
       }
       for (const t of templates) {
-        const desc = t.description ? `  — ${t.description}` : "";
-        console.log(`${t.id}  ${t.name}${desc}`);
+        console.log(`${t.id}  ${t.name}`);
+      }
+    } catch (error) {
+      console.error("Error:", error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+templatesCmd
+  .command("get <templateId>")
+  .description("Get full template JSON by ID")
+  .option("--design-only", "Output only the design object, not the full template")
+  .option("-o, --output <output>", "Save to file. Prints to stdout if omitted.")
+  .option("--base-url <baseUrl>", "API base URL", DEFAULT_BASE_URL)
+  .action(async (templateId, options) => {
+    const client = new InkframeClient({ apiKey: getApiKey(), baseUrl: options.baseUrl });
+
+    try {
+      const templates = await client.listTemplates();
+      const template = templates.find((t) => t.id === templateId);
+      if (!template) {
+        console.error(`Error: Template "${templateId}" not found`);
+        process.exit(1);
+      }
+
+      const json = JSON.stringify(options.designOnly ? template.design : template, null, 2);
+
+      if (options.output) {
+        writeFileSync(options.output, json);
+        console.log(`Saved: ${options.output}`);
+      } else {
+        console.log(json);
       }
     } catch (error) {
       console.error("Error:", error instanceof Error ? error.message : error);

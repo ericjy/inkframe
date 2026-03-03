@@ -1,4 +1,7 @@
 import { defineConfig } from "tsup";
+import { readFileSync } from "fs";
+
+const { version } = JSON.parse(readFileSync("./package.json", "utf-8"));
 
 export default defineConfig([
   {
@@ -11,6 +14,7 @@ export default defineConfig([
     entry: { cli: "src/cli.ts" },
     format: ["esm"],
     banner: { js: "#!/usr/bin/env node" },
+    define: { __CLI_VERSION__: JSON.stringify(version) },
     clean: false,
   },
 ]);

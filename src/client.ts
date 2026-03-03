@@ -1,7 +1,10 @@
 import type { RenderOptions, RenderResult, Template } from "./types.js";
 
+export const DEFAULT_BASE_URL = "https://inkframe.dev";
+export const FREE_API_KEY = "sk-api-OMREKpyqNTPQTPIbXK5BFuSKLj8lEvTx";
+
 export type InkframeConfig = {
-  apiKey: string;
+  apiKey?: string;
   baseUrl?: string;
 };
 
@@ -10,8 +13,8 @@ export class InkframeClient {
   private baseUrl: string;
 
   constructor(config: InkframeConfig) {
-    this.apiKey = config.apiKey;
-    this.baseUrl = (config.baseUrl ?? "https://smarkly.com").replace(/\/$/, "");
+    this.apiKey = config.apiKey ?? FREE_API_KEY;
+    this.baseUrl = (config.baseUrl ?? DEFAULT_BASE_URL).replace(/\/$/, "");
   }
 
   async render(options: RenderOptions): Promise<RenderResult> {

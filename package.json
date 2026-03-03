@@ -22,19 +22,43 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
-  "keywords": ["inkframe", "image", "render", "markdown", "cli", "mcp"],
+  "keywords": [
+    "inkframe",
+    "image",
+    "render",
+    "markdown",
+    "cli",
+    "mcp"
+  ],
+  "author": "ericjy",
   "license": "MIT",
+  "homepage": "https://inkframe.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ericjy/inkframe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ericjy/inkframe/issues"
+  },
   "dependencies": {
     "commander": "^12.1.0"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "tsup": "^8.3.0",
     "typescript": "^5.7.0",
-    "@types/node": "^22.0.0"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

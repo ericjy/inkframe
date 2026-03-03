@@ -60,6 +60,12 @@ export type RenderResult = {
 export type Template = {
   id: string;
   name: string;
-  description?: string;
+  content: string;
   design: Design;
+  thumbnailUrl?: string;
+  creativeFormat?: string;
+  templateProvider?: string;
+  templateTier?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };

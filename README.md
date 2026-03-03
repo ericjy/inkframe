@@ -1,48 +1,184 @@
 # inkframe
 
+[![npm version](https://img.shields.io/npm/v/inkframe)](https://www.npmjs.com/package/inkframe)
+[![license](https://img.shields.io/npm/l/inkframe)](./LICENSE)
+[![node](https://img.shields.io/node/v/inkframe)](https://nodejs.org)
+
 Render beautiful visual images from markdown content — CLI and SDK.
+
+Powered by [inkframe.dev](https://inkframe.dev).
+
+Includes a free shared API key so you can try it instantly — no signup required.
+The shared key may be rate-limited or rotated over time; bring your own key for production use.
+
+## Requirements
+
+- Node.js 18+
+- An inkframe API key (a free shared key is included by default; for production use, [open an issue](https://github.com/ericjy/inkframe/issues/new?title=API+Key+Request) to request a dedicated key)
 
 ## Install
 
 ```bash
-npm install -g inkframe
+# Global (for CLI use)
+pnpm add -g inkframe
+
+# Local (for SDK use)
+pnpm add inkframe
 ```
 
-## CLI
+## Workflow
+
+### 1. Render with a template
+
+The quickest way to get started — pick a template and render your content with it.
 
 ```bash
-export INKFRAME_API_KEY=your_api_key
+# See what templates are available
+inkframe templates list
 
-# Render from inline content, print URL
-inkframe render --content "# Hello World"
+# Render using a template (uses template's own content and design)
+inkframe render --template tmpl_PWfUUDlVw --output out.png
 
-# Render from a markdown file, save to disk
-inkframe render --content post.md --output out.png
+# Or bring your own content (file)
+inkframe render --content @post.md --template tmpl_PWfUUDlVw --output out.png
 
-# Use a custom design
-inkframe render --content post.md --design design.json --output out.png
-
-# List available templates
-inkframe templates
+# Or bring your own content (inline)
+inkframe render --content "# My Post\n\nHello world." --template tmpl_PWfUUDlVw --output out.png
 ```
 
-## SDK
+### 2. Customize a design
+
+Extract a template's design as a starting point, tweak it, then render with your custom version.
+
+```bash
+# Extract the design from a template
+inkframe templates get tmpl_PWfUUDlVw --design-only --output design.json
+
+# Edit design.json to your liking, then render with a file
+inkframe render --content @post.md --design @design.json --output out.png
+
+# Inline content + inline design
+inkframe render --content "# My Post\n\nHello world." --design '{"backgroundKey":"ocean","colorPaletteKey":"pure-white"}' --output out.png
+```
+
+### 3. Automate with the SDK
+
+Use the TypeScript SDK to render images programmatically in your scripts or pipelines.
 
 ```ts
 import { InkframeClient } from "inkframe";
 
+// Uses free shared key by default, or pass your own
 const client = new InkframeClient({ apiKey: process.env.INKFRAME_API_KEY });
 
 const result = await client.render({
   content: "# Hello World\n\nThis is a visual post.",
-  design: {
-    backgroundKey: "ocean",
-    colorPaletteKey: "pure-white",
-    dimensionSpecKey: "instagram-4:5",
-  },
+  design: { backgroundKey: "ocean", dimensionSpecKey: "instagram-4:5" },
 });
 
-console.log(result.resultUrl); // https://...
+console.log(result.resultUrl);
+```
+
+---
+
+## CLI
+
+```bash
+# Works out of the box with the free shared key
+inkframe render --content "# Hello World"
+
+# Or set your own API key
+export INKFRAME_API_KEY=your_api_key
+inkframe render --content "# Hello World"
+
+# Render from a markdown file (prefix with @)
+inkframe render --content @post.md --output out.png
+
+# Use a template (uses template's own content and design)
+inkframe render --template tmpl_PWfUUDlVw --output out.png
+
+# Use a template with your own content
+inkframe render --content @post.md --template tmpl_PWfUUDlVw --output out.png
+
+# Use a design file
+inkframe render --content @post.md --design @design.json --output out.png
+
+# Use inline design JSON
+inkframe render --content "# Hello World" --design '{"backgroundKey":"ocean"}' --output out.png
+
+# List available templates
+inkframe templates list
+
+# Get full template JSON
+inkframe templates get tmpl_PWfUUDlVw
+
+# Get only the design object
+inkframe templates get tmpl_PWfUUDlVw --design-only
+
+# Save to file
+inkframe templates get tmpl_PWfUUDlVw --output template.json
+inkframe templates get tmpl_PWfUUDlVw --design-only --output design.json
+```
+
+## TypeScript SDK
+
+```ts
+import { InkframeClient } from "inkframe";
+
+// Uses free shared key by default, or pass your own
+const client = new InkframeClient({ apiKey: process.env.INKFRAME_API_KEY });
+
+try {
+  const result = await client.render({
+    content: "# Hello World\n\nThis is a visual post.",
+    design: {
+      backgroundKey: "ocean",
+      colorPaletteKey: "pure-white",
+      dimensionSpecKey: "instagram-4:5",
+    },
+  });
+  console.log(result.resultUrl); // https://...
+} catch (error) {
+  console.error("Render failed:", error.message);
+}
+```
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build (outputs to dist/)
+pnpm build
+
+# Watch mode
+pnpm dev
+
+# Type check without building
+pnpm typecheck
+```
+
+**Test the CLI locally against the live API:**
+
+```bash
+pnpm build
+INKFRAME_API_KEY=your_api_key node dist/cli.js render --content "# Hello World"
+```
+
+**Test against a local server:**
+
+```bash
+INKFRAME_API_KEY=your_api_key node dist/cli.js render --content "# Hello World" --base-url http://localhost:3000
+```
+
+**Simulate a global install:**
+
+```bash
+pnpm link --global
+
+export INKFRAME_API_KEY=your_api_key
+inkframe render --content "# Hello World"
 ```
 
 ## License
