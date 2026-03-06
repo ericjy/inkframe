@@ -2,8 +2,17 @@ import { Command } from "commander";
 
 declare const __CLI_VERSION__: string;
 import { writeFileSync } from "fs";
+import { exec } from "child_process";
 import { InkframeClient, DEFAULT_BASE_URL } from "./client.js";
 import { readArg, readDesignArg } from "./args.js";
+
+const PLAYGROUND_BASE_URL = "https://www.visuallypost.com";
+
+function openUrl(url: string): void {
+  const cmd =
+    process.platform === "darwin" ? "open" : process.platform === "win32" ? "start" : "xdg-open";
+  exec(`${cmd} ${JSON.stringify(url)}`);
+}
 
 function getApiKey(): string | undefined {
   return process.env.INKFRAME_API_KEY;
@@ -126,6 +135,31 @@ templatesCmd
       console.error("Error:", error instanceof Error ? error.message : error);
       process.exit(1);
     }
+  });
+
+program
+  .command("open")
+  .description("Open the VisuallyPost playground in your browser with pre-populated content")
+  .option("-c, --content <content>", "Inline markdown or @file.md to read from a file")
+  .option("-d, --design <design>", "Inline design JSON or @file.json")
+  .option("--base-url <baseUrl>", "Playground base URL", PLAYGROUND_BASE_URL)
+  .action((options) => {
+    const params = new URLSearchParams();
+
+    if (options.content) {
+      const content = readArg(options.content);
+      params.set("content", Buffer.from(content, "utf-8").toString("base64"));
+    }
+
+    if (options.design) {
+      const design = readDesignArg(options.design);
+      params.set("design", Buffer.from(JSON.stringify(design), "utf-8").toString("base64"));
+    }
+
+    const query = params.toString();
+    const url = `${options.baseUrl}/playground${query ? `?${query}` : ""}`;
+    console.log(url);
+    openUrl(url);
   });
 
 program.parse();

@@ -28,6 +28,20 @@ pnpm add inkframe
 
 ## Workflow
 
+### 0. Preview in the browser (free, no API key)
+
+Open the [VisuallyPost playground](https://www.visuallypost.com/playground) with your content pre-loaded — no API key needed.
+
+```bash
+# Inline content
+inkframe open --content "# Hello World\n\nThis is styled."
+
+# From files
+inkframe open --content @post.md --design @design.json
+```
+
+This opens your browser with the playground pre-populated so you can preview and tweak before rendering.
+
 ### 1. Render with a template
 
 The quickest way to get started — pick a template and render your content with it.
@@ -118,6 +132,10 @@ inkframe templates get tmpl_PWfUUDlVw --design-only
 # Save to file
 inkframe templates get tmpl_PWfUUDlVw --output template.json
 inkframe templates get tmpl_PWfUUDlVw --design-only --output design.json
+
+# Open playground in browser (free, no API key needed)
+inkframe open --content "# Hello World"
+inkframe open --content @post.md --design @design.json
 ```
 
 ## TypeScript SDK
@@ -143,6 +161,28 @@ try {
 }
 ```
 
+## Multi-Page Content
+
+Content can contain `\pagebreak` to separate pages (slides). The API renders **one image per request** — if your content has `\pagebreak` separators, only the first page is rendered. The [inkframe.dev studio](https://inkframe.dev) UI supports rendering all pages at once.
+
+To render multi-page content via the CLI or SDK, split the content yourself and render each page in parallel:
+
+```bash
+# Render each page separately, in parallel
+inkframe render --content @page1.md --design @design.json --output slide1.png &
+inkframe render --content @page2.md --design @design.json --output slide2.png &
+inkframe render --content @page3.md --design @design.json --output slide3.png &
+wait
+```
+
+```ts
+// SDK: render pages in parallel
+const pages = fullContent.split("\\pagebreak");
+const results = await Promise.all(
+  pages.map((page) => client.render({ content: page.trim(), design }))
+);
+```
+
 ## Development
 
 ```bash
@@ -157,6 +197,13 @@ pnpm dev
 
 # Type check without building
 pnpm typecheck
+```
+
+**Test the `open` command locally (point to local webapp):**
+
+```bash
+pnpm build
+node dist/cli.js open --content "# Hello World" --base-url http://localhost:3001
 ```
 
 **Test the CLI locally against the live API:**

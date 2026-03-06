@@ -34,9 +34,27 @@ inkframe render --content @post.md --output out.png
 
 # Use a template for instant styling
 inkframe render --template tmpl_PWfUUDlVw --content @post.md --output out.png
+
+# Preview in the browser (free, no API key needed)
+inkframe open --content @post.md --design @design.json
 ```
 
 ## CLI Commands
+
+### `inkframe open`
+
+Opens the [VisuallyPost playground](https://www.visuallypost.com/playground) in the browser with your content and design pre-loaded. Free, no API key needed — great for previewing and tweaking before rendering.
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-c, --content <text>` | Markdown string or `@file.md` to read from file | — |
+| `-d, --design <json>` | Inline JSON or `@file.json` | — |
+| `--base-url <url>` | Playground base URL | `https://www.visuallypost.com` |
+
+```bash
+inkframe open --content "# Hello World"
+inkframe open --content @post.md --design @design.json
+```
 
 ### `inkframe render`
 
@@ -103,6 +121,22 @@ Only reach for `--design` when the user wants something specific that no templat
 
 For the full reference of all design fields (dimensions, backgrounds, color palettes, fonts, and more), read `references/design-options.md` in this skill's directory.
 
+## Multi-Page Content
+
+Content can include `\pagebreak` to separate pages (e.g. for carousels or slideshows). The API renders **one image per request** — if your content has `\pagebreak`, only the first page is rendered. The [inkframe.dev studio](https://inkframe.dev) UI supports rendering all pages at once.
+
+To render multi-page content, split it yourself and make one render call per page. Run them **in parallel** for speed:
+
+```bash
+# Split content and render each page in parallel
+inkframe render --content @page1.md --design @design.json --output slide1.png &
+inkframe render --content @page2.md --design @design.json --output slide2.png &
+inkframe render --content @page3.md --design @design.json --output slide3.png &
+wait
+```
+
+When building carousels or slideshows, write each page to a separate temp file, then render all pages in parallel using `&` and `wait`.
+
 ## Design Pitfalls
 
 When `contentBoxVisibility` is false, text renders directly on the background with no box behind it. Avoid these combinations — the text becomes unreadable:
@@ -117,6 +151,7 @@ Either keep the content box visible, or match the palette theme to the backgroun
 1. **Try a template as-is first** — the curated designs are almost always better than custom ones. Use `inkframe templates list` to browse, then render with `--template`.
 2. **Inspect before customizing** — `inkframe templates get <id>` shows the template's content and design. Model your markdown after the template's content structure.
 3. **Customize sparingly** — if you must customize, start from a template's design and change only what's needed. Don't build designs from scratch.
-4. **Write markdown to a temp file** for anything longer than a line or two, then use `@file.md`. This avoids shell escaping issues with inline content.
-5. **Always use `--output`** to save the image locally rather than just printing a URL.
-6. **Content is standard markdown** — headings, bold, italic, lists, code blocks, and blockquotes all render as expected.
+4. **Preview with `inkframe open`** — use `inkframe open --content @post.md --design @design.json` to open the playground in the browser for interactive previewing and tweaking. Free, no API key needed.
+5. **Write markdown to a temp file** for anything longer than a line or two, then use `@file.md`. This avoids shell escaping issues with inline content.
+6. **Always use `--output`** to save the image locally rather than just printing a URL.
+7. **Content is standard markdown** — headings, bold, italic, lists, code blocks, and blockquotes all render as expected.
