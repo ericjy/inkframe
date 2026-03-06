@@ -159,6 +159,9 @@ try {
 } catch (error) {
   console.error("Render failed:", error.message);
 }
+
+// List templates without thumbnailUrl
+const templates = await client.listTemplates({ exclude: ["thumbnailUrl"] });
 ```
 
 ## Multi-Page Content

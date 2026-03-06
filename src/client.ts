@@ -34,8 +34,13 @@ export class InkframeClient {
     return data as RenderResult;
   }
 
-  async listTemplates(): Promise<Template[]> {
-    const response = await fetch(`${this.baseUrl}/api/templates`, {
+  async listTemplates(options?: { exclude?: string[] }): Promise<Template[]> {
+    const params = new URLSearchParams();
+    if (options?.exclude?.length) {
+      params.set("exclude", options.exclude.join(","));
+    }
+    const query = params.toString();
+    const response = await fetch(`${this.baseUrl}/api/templates${query ? `?${query}` : ""}`, {
       headers: { "x-api-key": this.apiKey },
     });
 

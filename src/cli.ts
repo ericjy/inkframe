@@ -43,7 +43,7 @@ program
     let design = options.design ? readDesignArg(options.design) : undefined;
 
     if (options.template) {
-      const templates = await client.listTemplates();
+      const templates = await client.listTemplates({ exclude: ["thumbnailUrl"] });
       const template = templates.find((t) => t.id === options.template);
       if (!template) {
         console.error(`Error: Template "${options.template}" not found`);
@@ -92,7 +92,7 @@ templatesCmd
     const client = new InkframeClient({ apiKey: getApiKey(), baseUrl: options.baseUrl });
 
     try {
-      const templates = await client.listTemplates();
+      const templates = await client.listTemplates({ exclude: ["thumbnailUrl"] });
       if (templates.length === 0) {
         console.log("No templates found");
         return;
@@ -116,7 +116,7 @@ templatesCmd
     const client = new InkframeClient({ apiKey: getApiKey(), baseUrl: options.baseUrl });
 
     try {
-      const templates = await client.listTemplates();
+      const templates = await client.listTemplates({ exclude: ["thumbnailUrl"] });
       const template = templates.find((t) => t.id === templateId);
       if (!template) {
         console.error(`Error: Template "${templateId}" not found`);
