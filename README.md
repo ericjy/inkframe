@@ -30,7 +30,7 @@ pnpm add inkframe
 
 ### 0. Preview in the browser (free, no API key)
 
-Open the [VisuallyPost playground](https://www.visuallypost.com/playground) with your content pre-loaded — no API key needed.
+Open the [Inkframe playground](https://www.inkframe.dev/playground) with your content pre-loaded — no API key needed.
 
 ```bash
 # Inline content

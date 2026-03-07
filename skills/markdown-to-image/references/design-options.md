@@ -2,7 +2,7 @@
 
 All fields are optional. Pass only the ones you want to customize. Defaults are shown where applicable.
 
-<!-- Auto-generated from smarkly-webapp source types. Do not edit manually. -->
+<!-- Auto-generated from inkframe-webapp source types. Do not edit manually. -->
 <!-- Regenerate with: npx tsx scripts/generate-design-docs.ts -->
 
 ## Table of Contents

@@ -43,13 +43,13 @@ inkframe open --content @post.md --design @design.json
 
 ### `inkframe open`
 
-Opens the [VisuallyPost playground](https://www.visuallypost.com/playground) in the browser with your content and design pre-loaded. Free, no API key needed — great for previewing and tweaking before rendering.
+Opens the [Inkframe playground](https://www.inkframe.dev/playground) in the browser with your content and design pre-loaded. Free, no API key needed — great for previewing and tweaking before rendering.
 
 | Flag | Description | Default |
 |------|-------------|---------|
 | `-c, --content <text>` | Markdown string or `@file.md` to read from file | — |
 | `-d, --design <json>` | Inline JSON or `@file.json` | — |
-| `--base-url <url>` | Playground base URL | `https://www.visuallypost.com` |
+| `--base-url <url>` | Playground base URL | `https://www.inkframe.dev` |
 
 ```bash
 inkframe open --content "# Hello World"

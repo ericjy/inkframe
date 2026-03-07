@@ -6,7 +6,7 @@ import { exec } from "child_process";
 import { InkframeClient, DEFAULT_BASE_URL } from "./client.js";
 import { readArg, readDesignArg } from "./args.js";
 
-const PLAYGROUND_BASE_URL = "https://www.visuallypost.com";
+const PLAYGROUND_BASE_URL = "https://www.inkframe.dev";
 
 function openUrl(url: string): void {
   const cmd =
@@ -139,7 +139,7 @@ templatesCmd
 
 program
   .command("open")
-  .description("Open the VisuallyPost playground in your browser with pre-populated content")
+  .description("Open the Inkframe playground in your browser with pre-populated content")
   .option("-c, --content <content>", "Inline markdown or @file.md to read from a file")
   .option("-d, --design <design>", "Inline design JSON or @file.json")
   .option("--base-url <baseUrl>", "Playground base URL", PLAYGROUND_BASE_URL)
