@@ -15,11 +15,13 @@ The shared key may be rate-limited or rotated over time; bring your own API key 
 ## Quickstart
 
 ```bash
-# headless render
+# headless render, great for programmatical use
 npx inkframe render --content "# Hello Inkframe" --output out.png
+npx inkframe render --content @path/to/markdown.md --output out.png # content from file
 
-# open in browser for preview, adjust, and manual download
+# open "Inkframe Playground" in browser for preview, adjust, and manual image export
 npx inkframe open --content "# Hello Inkframe"
+npx inkframe open --content @path/to/markdown.md  # content from file
 ```
 
 ## Requirements
