@@ -8,7 +8,7 @@ export function readArg(value: string): string {
     }
     return readFileSync(filePath, "utf-8");
   }
-  return value;
+  return value.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
 }
 
 export function readDesignArg(value: string): object {

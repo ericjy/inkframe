@@ -28,6 +28,11 @@ describe("readArg", () => {
     expect(() => readArg("@/tmp/nonexistent.md")).toThrow("File not found: /tmp/nonexistent.md");
   });
 
+  it("converts escape sequences in inline value", () => {
+    expect(readArg("# Hello\\n\\nWorld")).toBe("# Hello\n\nWorld");
+    expect(readArg("col1\\tcol2")).toBe("col1\tcol2");
+  });
+
   it("treats value without @ as inline even if it looks like a path", () => {
     expect(readArg("post.md")).toBe("post.md");
   });
