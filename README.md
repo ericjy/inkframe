@@ -26,36 +26,46 @@ npx inkframe open --content "# Hello Inkframe"
 
 - Node.js 18+
 
-## Install Skill
+## Installation
+
+### Skill
 
 ```bash
 # Strongly recommend if you use inkframe with agent: Claude Code, Codex, etc.
 npx skills add ericjy/inkframe
 ```
 
-## Install CLI
+### CLI
 
 ```bash
 # Install CLI globally to skip typing npx - below examples assume this
 pnpm add -g inkframe
 ```
 
-## Install TyepScript SDK
+### TyepScript SDK
 
 ```bash
 # You only need this if you are integrating inkframe through SDK
 pnpm add inkframe
 ```
 
-## Workflow
+## Using inkframe with agent
 
-### 0. Preview in the browser (free, no API key)
+First install the skill (see above). Then prompt your agent:
 
-Open the [Inkframe playground](https://www.inkframe.dev/playground) with your content pre-loaded — no API key needed.
+```
+Use inkframe to convert markdown to image
+```
+
+## Using inkframe without agent
+
+### 0. Preview in the browser
+
+Open the [Inkframe playground](https://www.inkframe.dev/playground) with your content pre-loaded.
 
 ```bash
 # Inline content
-inkframe open --content "# Hello World\n\nThis is styled."
+inkframe open --content "# Hello World"
 
 # From files
 inkframe open --content @post.md --design @design.json
@@ -78,7 +88,7 @@ inkframe render --template tmpl_PWfUUDlVw --output out.png
 inkframe render --content @post.md --template tmpl_PWfUUDlVw --output out.png
 
 # Or bring your own content (inline)
-inkframe render --content "# My Post\n\nHello world." --template tmpl_PWfUUDlVw --output out.png
+inkframe render --content "# My Post" --template tmpl_PWfUUDlVw --output out.png
 ```
 
 ### 2. Customize a design
@@ -93,7 +103,7 @@ inkframe templates get tmpl_PWfUUDlVw --design-only --output design.json
 inkframe render --content @post.md --design @design.json --output out.png
 
 # Inline content + inline design
-inkframe render --content "# My Post\n\nHello world." --design '{"backgroundKey":"ocean","colorPaletteKey":"pure-white"}' --output out.png
+inkframe render --content "# My Post" --design '{"backgroundKey":"ocean","colorPaletteKey":"pure-white"}' --output out.png
 ```
 
 ### 3. Automate with the SDK
@@ -116,7 +126,7 @@ console.log(result.resultUrl);
 
 ---
 
-## CLI
+## Using the CLI
 
 ```bash
 # Works out of the box with the free shared key
@@ -159,7 +169,7 @@ inkframe open --content "# Hello World"
 inkframe open --content @post.md --design @design.json
 ```
 
-## TypeScript SDK
+## Using the TypeScript SDK
 
 ```ts
 import { InkframeClient } from "inkframe";
@@ -169,7 +179,7 @@ const client = new InkframeClient({ apiKey: process.env.INKFRAME_API_KEY });
 
 try {
   const result = await client.render({
-    content: "# Hello World\n\nThis is a visual post.",
+    content: "# Hello World",
     design: {
       backgroundKey: "ocean",
       colorPaletteKey: "pure-white",
