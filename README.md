@@ -4,25 +4,36 @@
 [![license](https://img.shields.io/npm/l/inkframe)](./LICENSE)
 [![node](https://img.shields.io/node/v/inkframe)](https://nodejs.org)
 
-Render beautiful visual images from markdown content — CLI and SDK.
+Render beautiful visual images from markdown content — CLI, SDK, and Agent Skill.
 
 Powered by [inkframe.dev](https://inkframe.dev).
 
 Includes a free shared API key so you can try it instantly — no signup required.
-The shared key may be rate-limited or rotated over time; bring your own key for production use.
+The shared key may be rate-limited or rotated over time; bring your own API key for production use.
+[Open an issue](https://github.com/ericjy/inkframe/issues/new?title=API+Key+Request) to request API key.
 
 ## Requirements
 
 - Node.js 18+
-- An inkframe API key (a free shared key is included by default; for production use, [open an issue](https://github.com/ericjy/inkframe/issues/new?title=API+Key+Request) to request a dedicated key)
 
-## Install
+## Install Skill
 
 ```bash
-# Global (for CLI use)
-pnpm add -g inkframe
+# Recommend if you are using local agent, Claude Code, Codex CLI, etc.
+npx skills add ericjy/inkframe
+```
 
-# Local (for SDK use)
+## Install CLI
+
+```bash
+# You must install CLI for the local agent to work with inkframe
+pnpm add -g inkframe
+```
+
+## Install TyepScript SDK
+
+```bash
+# You only need this if you are integrating inkframe through SDK
 pnpm add inkframe
 ```
 
@@ -182,7 +193,7 @@ wait
 // SDK: render pages in parallel
 const pages = fullContent.split("\\pagebreak");
 const results = await Promise.all(
-  pages.map((page) => client.render({ content: page.trim(), design }))
+  pages.map((page) => client.render({ content: page.trim(), design })),
 );
 ```
 
