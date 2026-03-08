@@ -3,6 +3,7 @@ import { Command } from "commander";
 declare const __CLI_VERSION__: string;
 import { writeFileSync } from "fs";
 import { exec } from "child_process";
+import { deflateRawSync } from "zlib";
 import { InkframeClient, DEFAULT_BASE_URL } from "./client.js";
 import { readArg, readDesignArg } from "./args.js";
 
@@ -148,12 +149,12 @@ program
 
     if (options.content) {
       const content = readArg(options.content);
-      params.set("content", Buffer.from(content, "utf-8").toString("base64"));
+      params.set("content", deflateRawSync(Buffer.from(content, "utf-8")).toString("base64"));
     }
 
     if (options.design) {
       const design = readDesignArg(options.design);
-      params.set("design", Buffer.from(JSON.stringify(design), "utf-8").toString("base64"));
+      params.set("design", deflateRawSync(Buffer.from(JSON.stringify(design), "utf-8")).toString("base64"));
     }
 
     const query = params.toString();
