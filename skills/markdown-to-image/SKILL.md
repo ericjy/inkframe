@@ -5,43 +5,31 @@ description: "Render markdown as beautiful styled images using the inkframe CLI.
 
 # Inkframe — Markdown to Image
 
-Inkframe renders markdown content into polished, styled images via the inkframe.dev API. It runs as a CLI (`inkframe`) and includes a free shared API key, so it works out of the box.
+Inkframe renders markdown content into polished, styled images via the inkframe.dev API. Run it via `npx inkframe` — no global install needed. The package includes a free shared API key, so it works out of the box.
 
 ## Setup
 
-Before first use, check if `inkframe` is available:
-
-```bash
-npx inkframe --help
-```
-
-If it's not installed, install it globally:
-
-```bash
-npm install -g inkframe
-```
-
-This gives you the `inkframe` command. The package ships with a free shared API key — no signup needed.
+No setup needed — always run the CLI via `npx inkframe`. The package ships with a free shared API key, so it works out of the box with no signup.
 
 ## Quick Start
 
 ```bash
 # Simplest render — just give it markdown
-inkframe render --content "# Hello World\n\nThis is styled." --output out.png
+npx inkframe render --content "# Hello World\n\nThis is styled." --output out.png
 
 # Render from a file
-inkframe render --content @post.md --output out.png
+npx inkframe render --content @post.md --output out.png
 
 # Use a template for instant styling
-inkframe render --template tmpl_PWfUUDlVw --content @post.md --output out.png
+npx inkframe render --template tmpl_PWfUUDlVw --content @post.md --output out.png
 
 # Preview in the browser (free, no API key needed)
-inkframe open --content @post.md --design @design.json
+npx inkframe open --content @post.md --design @design.json
 ```
 
 ## CLI Commands
 
-### `inkframe open`
+### `npx inkframe open`
 
 Opens the [Inkframe playground](https://www.inkframe.dev/playground) in the browser with your content and design pre-loaded. Free, no API key needed — great for previewing and tweaking before rendering.
 
@@ -52,11 +40,11 @@ Opens the [Inkframe playground](https://www.inkframe.dev/playground) in the brow
 | `--base-url <url>` | Playground base URL | `https://www.inkframe.dev` |
 
 ```bash
-inkframe open --content "# Hello World"
-inkframe open --content @post.md --design @design.json
+npx inkframe open --content "# Hello World"
+npx inkframe open --content @post.md --design @design.json
 ```
 
-### `inkframe render`
+### `npx inkframe render`
 
 | Flag | Description | Default |
 |------|-------------|---------|
@@ -69,11 +57,11 @@ inkframe open --content @post.md --design @design.json
 
 Content uses the `@` prefix convention: `--content @notes.md` reads from `notes.md`, while `--content "# Title"` is inline markdown.
 
-### `inkframe templates list`
+### `npx inkframe templates list`
 
 Lists all available templates with their IDs and names.
 
-### `inkframe templates get <id>`
+### `npx inkframe templates get <id>`
 
 Gets full template JSON. Add `--design-only` to get just the design object. Add `-o file.json` to save to file.
 
@@ -115,9 +103,9 @@ Match the content to the template's purpose. When in doubt, **inspect the templa
 
 Only reach for `--design` when the user wants something specific that no template provides — a particular aspect ratio, custom branding, or a specific color scheme. In that case, the best approach is:
 
-1. Find the closest template: `inkframe templates get <id> --design-only --output design.json`
+1. Find the closest template: `npx inkframe templates get <id> --design-only --output design.json`
 2. Modify only the fields that need to change
-3. Render with: `inkframe render --content @post.md --design @design.json --output out.png`
+3. Render with: `npx inkframe render --content @post.md --design @design.json --output out.png`
 
 For the full reference of all design fields (dimensions, backgrounds, color palettes, fonts, and more), read `references/design-options.md` in this skill's directory.
 
@@ -129,9 +117,9 @@ To render multi-page content, split it yourself and make one render call per pag
 
 ```bash
 # Split content and render each page in parallel
-inkframe render --content @page1.md --design @design.json --output slide1.png &
-inkframe render --content @page2.md --design @design.json --output slide2.png &
-inkframe render --content @page3.md --design @design.json --output slide3.png &
+npx inkframe render --content @page1.md --design @design.json --output slide1.png &
+npx inkframe render --content @page2.md --design @design.json --output slide2.png &
+npx inkframe render --content @page3.md --design @design.json --output slide3.png &
 wait
 ```
 
@@ -148,10 +136,10 @@ Either keep the content box visible, or match the palette theme to the backgroun
 
 ## Workflow Tips
 
-1. **Try a template as-is first** — the curated designs are almost always better than custom ones. Use `inkframe templates list` to browse, then render with `--template`.
-2. **Inspect before customizing** — `inkframe templates get <id>` shows the template's content and design. Model your markdown after the template's content structure.
+1. **Try a template as-is first** — the curated designs are almost always better than custom ones. Use `npx inkframe templates list` to browse, then render with `--template`.
+2. **Inspect before customizing** — `npx inkframe templates get <id>` shows the template's content and design. Model your markdown after the template's content structure.
 3. **Customize sparingly** — if you must customize, start from a template's design and change only what's needed. Don't build designs from scratch.
-4. **Preview with `inkframe open`** — use `inkframe open --content @post.md --design @design.json` to open the playground in the browser for interactive previewing and tweaking. Free, no API key needed.
+4. **Preview with `npx inkframe open`** — use `npx inkframe open --content @post.md --design @design.json` to open the playground in the browser for interactive previewing and tweaking. Free, no API key needed.
 5. **Write markdown to a temp file** for anything longer than a line or two, then use `@file.md`. This avoids shell escaping issues with inline content.
 6. **Always use `--output`** to save the image locally rather than just printing a URL.
 7. **Content is standard markdown** — headings, bold, italic, lists, code blocks, and blockquotes all render as expected.

@@ -12,6 +12,16 @@ Includes a free shared API key so you can try it instantly — no signup require
 The shared key may be rate-limited or rotated over time; bring your own API key for production use.
 [Open an issue](https://github.com/ericjy/inkframe/issues/new?title=API+Key+Request) to request API key.
 
+## Quickstart
+
+```bash
+# headless render
+npx inkframe render --content "# Hello Inkframe" --output out.png
+
+# open in browser for preview, adjust, and manual download
+npx inkframe open --content "# Hello Inkframe"
+```
+
 ## Requirements
 
 - Node.js 18+
@@ -19,14 +29,14 @@ The shared key may be rate-limited or rotated over time; bring your own API key 
 ## Install Skill
 
 ```bash
-# Recommend if you are using local agent, Claude Code, Codex CLI, etc.
+# Strongly recommend if you use inkframe with agent: Claude Code, Codex, etc.
 npx skills add ericjy/inkframe
 ```
 
 ## Install CLI
 
 ```bash
-# You must install CLI for the local agent to work with inkframe
+# Install CLI globally to skip typing npx - below examples assume this
 pnpm add -g inkframe
 ```
 
