@@ -8,20 +8,34 @@ Render beautiful visual images from markdown content — CLI, SDK, and Agent Ski
 
 Powered by [inkframe.dev](https://inkframe.dev).
 
-Includes a free shared API key so you can try it instantly — no signup required.
+## Quickstart
+
+### Headless render mode
+
+Call Inkframe API to render. Great for programmatical use.
+
+```bash
+# inline content
+npx inkframe render --content "# Hello Inkframe" --output out.png
+
+# or from file content
+npx inkframe render --content @path/to/markdown.md --output out.png
+```
+
+The CLI includes a free shared API key so you can try it instantly — no signup required.
 The shared key may be rate-limited or rotated over time; bring your own API key for production use.
 [Open an issue](https://github.com/ericjy/inkframe/issues/new?title=API+Key+Request) to request API key.
 
-## Quickstart
+### Inkframe Playground render mode
+
+Open "Inkframe Playground" in browser for preview, adjust, and manual image export.
 
 ```bash
-# headless render, great for programmatical use
-npx inkframe render --content "# Hello Inkframe" --output out.png
-npx inkframe render --content @path/to/markdown.md --output out.png # content from file
-
-# open "Inkframe Playground" in browser for preview, adjust, and manual image export
+# inline content
 npx inkframe open --content "# Hello Inkframe"
-npx inkframe open --content @path/to/markdown.md  # content from file
+
+# or from file content
+npx inkframe open --content @path/to/markdown.md
 ```
 
 ## Requirements
