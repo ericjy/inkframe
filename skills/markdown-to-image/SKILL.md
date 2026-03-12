@@ -109,6 +109,37 @@ Only reach for `--design` when the user wants something specific that no templat
 
 For the full reference of all design fields (dimensions, backgrounds, color palettes, fonts, and more), read `references/design-options.md` in this skill's directory.
 
+## Interop With Prompt To Image
+
+You can combine this skill with `prompt-to-image` when the user wants AI-generated art behind rendered markdown.
+
+Important background fields:
+
+- `backgroundImageUrl`: full-canvas background image
+- `contentBoxImageUrl`: background image inside the content box
+
+These fields can use a normal hosted URL, and they can also use a base64 data URL such as `data:image/png;base64,...`.
+
+Recommended workflow:
+
+1. Use `prompt-to-image` to generate a background image
+2. Convert the resulting file to a base64 data URL
+3. Put that data URL into `backgroundImageUrl` or `contentBoxImageUrl`
+4. Render with `npx inkframe render`
+
+Example design:
+
+```json
+{
+  "backgroundImageUrl": "data:image/png;base64,...",
+  "backgroundOverlayPresence": "dark",
+  "contentBoxVisibility": true,
+  "colorPaletteKey": "pure-white"
+}
+```
+
+When the background is busy or high-contrast, use `backgroundOverlayPresence` and keep the content box visible so the text stays readable.
+
 ## Multi-Page Content
 
 Content can include `\pagebreak` to separate pages (e.g. for carousels or slideshows). The API renders **one image per request** — if your content has `\pagebreak`, only the first page is rendered. The [inkframe.dev studio](https://inkframe.dev) UI supports rendering all pages at once.

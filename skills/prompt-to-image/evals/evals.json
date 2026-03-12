@@ -1,0 +1,23 @@
+{
+  "skill_name": "prompt-to-image",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create two square app icon concepts for a budgeting app called PennyTrail. Make them warm, simple, and premium.",
+      "expected_output": "Two locally saved square image concepts with clearly distinct icon directions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Use Nano Banana to generate a vertical travel poster for Kyoto in rain, woodblock print style, lots of negative space.",
+      "expected_output": "A vertical poster-like image saved locally, with a clear rainy Kyoto mood and woodblock-inspired styling.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Generate an OpenAI image for a YouTube thumbnail about debugging React hydration issues. High contrast, modern, readable composition.",
+      "expected_output": "A locally saved thumbnail-style image with strong contrast and a composition suited to a technical video cover.",
+      "files": []
+    }
+  ]
+}
