@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tier List</title>
+    <style>
+      :root {
+        --page-bg: #020617;
+        --page-grid: rgba(148, 163, 184, 0.08);
+        --surface-border: rgba(255, 255, 255, 0.08);
+        --text-strong: #e5e7eb;
+        --text-muted: rgba(229, 231, 235, 0.58);
+        --card-bg: rgba(255, 255, 255, 0.07);
+        --card-border: rgba(255, 255, 255, 0.12);
+        --card-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
+        --ui-scale: 1;
+        --frame-padding: calc(56px * var(--ui-scale));
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "IBM Plex Mono", "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+        background: var(--page-bg);
+      }
+
+      body {
+        min-height: 100vh;
+        color: var(--text-strong);
+      }
+
+      .frame {
+        width: var(--frame-width);
+        min-height: var(--frame-height);
+        margin: 0 auto;
+        padding: var(--frame-padding);
+        background:
+          linear-gradient(90deg, transparent 0, transparent calc(79px * var(--ui-scale)), var(--page-grid) calc(80px * var(--ui-scale)), transparent calc(81px * var(--ui-scale))),
+          linear-gradient(0deg, transparent 0, transparent calc(79px * var(--ui-scale)), var(--page-grid) calc(80px * var(--ui-scale)), transparent calc(81px * var(--ui-scale))),
+          radial-gradient(circle at top center, rgba(168, 85, 247, 0.08), transparent 28%),
+          radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.12), transparent 22%),
+          var(--page-bg);
+      }
+
+      .board {
+        width: 100%;
+        min-height: calc(var(--frame-height) - (var(--frame-padding) * 2));
+        display: grid;
+        align-content: start;
+        gap: calc(18px * var(--ui-scale));
+      }
+
+      .header {
+        display: grid;
+        gap: calc(18px * var(--ui-scale));
+        margin-bottom: calc(14px * var(--ui-scale));
+      }
+
+      .title {
+        margin: 0;
+        font-size: calc(50px * var(--ui-scale));
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+        color: var(--text-strong);
+        text-shadow: 0 calc(2px * var(--ui-scale)) calc(10px * var(--ui-scale)) rgba(0, 0, 0, 0.24);
+      }
+
+      .subtitle {
+        margin: 0;
+        font-size: calc(28px * var(--ui-scale));
+        line-height: 1.4;
+        color: var(--text-muted);
+      }
+
+      .rows {
+        display: grid;
+        gap: calc(12px * var(--ui-scale));
+      }
+
+      .row {
+        --tier-accent: #ff5f57;
+        display: grid;
+        grid-template-columns: calc(var(--tier-label-width, 84) * 1px * var(--ui-scale)) 1fr;
+        align-items: stretch;
+        min-height: calc(var(--row-min-height, 104) * 1px * var(--ui-scale));
+        border-radius: calc(16px * var(--ui-scale));
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--tier-accent) 50%, rgba(255, 255, 255, 0.12));
+        background:
+          linear-gradient(90deg, color-mix(in srgb, var(--tier-accent) 26%, rgba(12, 12, 18, 0.95)) 0%, color-mix(in srgb, var(--tier-accent) 10%, rgba(15, 10, 14, 0.94)) 54%, rgba(10, 10, 12, 0.97) 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.05),
+          0 0 0 1px rgba(0, 0, 0, 0.32),
+          0 calc(12px * var(--ui-scale)) calc(32px * var(--ui-scale)) rgba(0, 0, 0, 0.18),
+          0 0 calc(22px * var(--ui-scale)) color-mix(in srgb, var(--tier-accent) 16%, transparent);
+      }
+
+      .tier-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: calc(8px * var(--ui-scale));
+        padding: calc(12px * var(--ui-scale)) calc(10px * var(--ui-scale));
+        color: var(--tier-accent);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+          color-mix(in srgb, var(--tier-accent) 26%, rgba(0, 0, 0, 0.12));
+        border-right: 1px solid color-mix(in srgb, var(--tier-accent) 60%, rgba(255, 255, 255, 0.12));
+        text-shadow: 0 0 calc(18px * var(--ui-scale)) color-mix(in srgb, var(--tier-accent) 56%, transparent);
+      }
+
+      .tier-key {
+        margin: 0;
+        font-size: calc(44px * var(--ui-scale));
+        line-height: 1;
+        letter-spacing: -0.06em;
+        font-weight: 700;
+      }
+
+      .tier-key--medium {
+        font-size: calc(24px * var(--ui-scale));
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        text-align: center;
+      }
+
+      .tier-key--long {
+        font-size: calc(19px * var(--ui-scale));
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        text-align: center;
+      }
+
+      .tier-name {
+        margin: 0;
+        font-size: 0;
+        line-height: 1.1;
+      }
+
+      .tier-items {
+        display: grid;
+        grid-template-columns: repeat(var(--tier-columns, 3), minmax(0, 1fr));
+        align-content: center;
+        gap: calc(12px * var(--ui-scale));
+        padding: calc(16px * var(--ui-scale)) calc(20px * var(--ui-scale));
+      }
+
+      .tier-item {
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+        min-height: calc(84px * var(--ui-scale));
+        padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(14px * var(--ui-scale));
+        border: 1px solid var(--card-border);
+        border-radius: calc(12px * var(--ui-scale));
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+          var(--card-bg);
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(4px);
+      }
+
+      .tier-item--title-only {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .tier-item--title-only .tier-item-title {
+        font-size: calc(24px * var(--ui-scale));
+        line-height: 1.15;
+      }
+
+      .row--compact {
+        --row-min-height: 92;
+        --tier-columns: 4;
+      }
+
+      .row--compact .tier-items {
+        gap: calc(10px * var(--ui-scale));
+        padding: calc(12px * var(--ui-scale)) calc(16px * var(--ui-scale));
+      }
+
+      .row--compact .tier-item {
+        min-height: calc(68px * var(--ui-scale));
+        padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale)) calc(10px * var(--ui-scale));
+      }
+
+      .row--compact .tier-item-title {
+        font-size: calc(17px * var(--ui-scale));
+      }
+
+      .row--compact .tier-item--title-only .tier-item-title {
+        font-size: calc(20px * var(--ui-scale));
+      }
+
+      .row--compact .tier-item-description {
+        display: none;
+      }
+
+      .row--dense {
+        --row-min-height: 84;
+        --tier-columns: 6;
+      }
+
+      .row--dense .tier-items {
+        gap: calc(8px * var(--ui-scale));
+        padding: calc(10px * var(--ui-scale)) calc(14px * var(--ui-scale));
+      }
+
+      .row--dense .tier-item {
+        min-height: calc(52px * var(--ui-scale));
+        padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(8px * var(--ui-scale));
+        border-radius: calc(10px * var(--ui-scale));
+      }
+
+      .row--dense .tier-item-title {
+        font-size: calc(15px * var(--ui-scale));
+        line-height: 1.05;
+      }
+
+      .row--dense .tier-item--title-only .tier-item-title {
+        font-size: calc(17px * var(--ui-scale));
+      }
+
+      .row--dense .tier-item-description {
+        display: none;
+      }
+
+      .tier-item-title {
+        margin: 0;
+        color: var(--text-strong);
+        font-size: calc(20px * var(--ui-scale));
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+
+      .tier-item-description {
+        margin: calc(12px * var(--ui-scale)) 0 0;
+        color: var(--text-muted);
+        font-size: calc(15px * var(--ui-scale));
+        line-height: 1.35;
+      }
+
+      .footer {
+        margin-top: calc(2px * var(--ui-scale));
+        font-size: calc(12px * var(--ui-scale));
+        color: var(--text-muted);
+        opacity: 0.8;
+      }
+
+      .watermark {
+        margin-top: auto;
+        justify-self: end;
+        padding-top: calc(18px * var(--ui-scale));
+        font-size: calc(16px * var(--ui-scale));
+        line-height: 1.2;
+        letter-spacing: 0.01em;
+        color: rgba(229, 231, 235, 0.42);
+        text-shadow: 0 0 calc(18px * var(--ui-scale)) rgba(59, 130, 246, 0.12);
+      }
+
+      .watermark-highlight {
+        color: rgba(229, 231, 235, 0.72);
+        font-weight: 700;
+      }
+
+      body.theme-classic {
+        --page-bg: #0c0906;
+        --page-grid: rgba(245, 158, 11, 0.08);
+        --text-strong: #f6ead7;
+        --text-muted: rgba(246, 234, 215, 0.56);
+        --card-bg: rgba(120, 74, 17, 0.15);
+        --card-border: rgba(251, 191, 36, 0.18);
+        --card-shadow: 0 16px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      body.theme-classic .frame {
+        background:
+          linear-gradient(90deg, transparent 0, transparent calc(79px * var(--ui-scale)), var(--page-grid) calc(80px * var(--ui-scale)), transparent calc(81px * var(--ui-scale))),
+          linear-gradient(0deg, transparent 0, transparent calc(79px * var(--ui-scale)), var(--page-grid) calc(80px * var(--ui-scale)), transparent calc(81px * var(--ui-scale))),
+          radial-gradient(circle at top center, rgba(251, 191, 36, 0.1), transparent 34%),
+          radial-gradient(circle at 10% 0%, rgba(239, 68, 68, 0.1), transparent 24%),
+          linear-gradient(180deg, rgba(24, 16, 12, 0.96), rgba(8, 6, 4, 1)),
+          var(--page-bg);
+      }
+
+      body.theme-classic .title {
+        text-shadow: 0 calc(2px * var(--ui-scale)) calc(14px * var(--ui-scale)) rgba(245, 158, 11, 0.12);
+      }
+
+      body.theme-classic .row {
+        border-radius: calc(14px * var(--ui-scale));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.04),
+          0 0 0 1px rgba(0, 0, 0, 0.28),
+          0 calc(10px * var(--ui-scale)) calc(24px * var(--ui-scale)) rgba(0, 0, 0, 0.22);
+        background:
+          linear-gradient(90deg, color-mix(in srgb, var(--tier-accent) 28%, rgba(30, 18, 10, 0.96)) 0%, color-mix(in srgb, var(--tier-accent) 12%, rgba(22, 14, 9, 0.96)) 56%, rgba(10, 8, 6, 0.98) 100%);
+      }
+
+      body.theme-editorial {
+        --page-bg: #01040d;
+        --page-grid: rgba(148, 163, 184, 0.06);
+        --text-strong: #e7e5e4;
+        --text-muted: rgba(214, 211, 209, 0.52);
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --card-border: rgba(255, 255, 255, 0.09);
+        --card-shadow: 0 18px 30px rgba(0, 0, 0, 0.24);
+      }
+
+      body.theme-editorial .frame {
+        background:
+          linear-gradient(90deg, transparent 0, transparent calc(95px * var(--ui-scale)), rgba(148, 163, 184, 0.05) calc(96px * var(--ui-scale)), transparent calc(97px * var(--ui-scale))),
+          linear-gradient(0deg, transparent 0, transparent calc(95px * var(--ui-scale)), rgba(148, 163, 184, 0.05) calc(96px * var(--ui-scale)), transparent calc(97px * var(--ui-scale))),
+          radial-gradient(circle at top center, rgba(148, 163, 184, 0.06), transparent 30%),
+          linear-gradient(180deg, rgba(3, 8, 18, 0.98), rgba(1, 4, 13, 1)),
+          var(--page-bg);
+      }
+
+      body.theme-editorial .row {
+        border-radius: calc(12px * var(--ui-scale));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.03),
+          0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale)) rgba(0, 0, 0, 0.2);
+      }
+
+      body.theme-editorial .tier-item {
+        border-radius: calc(10px * var(--ui-scale));
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+          rgba(255, 255, 255, 0.04);
+      }
+
+      body.theme-gaming-neon {
+        --page-bg: #02030a;
+        --page-grid: rgba(99, 102, 241, 0.08);
+        --text-strong: #f5f3ff;
+        --text-muted: rgba(221, 214, 254, 0.58);
+        --card-bg: rgba(67, 56, 202, 0.08);
+        --card-border: rgba(165, 180, 252, 0.16);
+        --card-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+      }
+
+      body.theme-gaming-neon .frame {
+        background:
+          linear-gradient(90deg, transparent 0, transparent calc(67px * var(--ui-scale)), rgba(99, 102, 241, 0.14) calc(68px * var(--ui-scale)), transparent calc(69px * var(--ui-scale))),
+          linear-gradient(0deg, transparent 0, transparent calc(67px * var(--ui-scale)), rgba(99, 102, 241, 0.14) calc(68px * var(--ui-scale)), transparent calc(69px * var(--ui-scale))),
+          radial-gradient(circle at top center, rgba(168, 85, 247, 0.16), transparent 26%),
+          radial-gradient(circle at 100% 0%, rgba(34, 211, 238, 0.12), transparent 24%),
+          linear-gradient(180deg, rgba(5, 7, 22, 0.98), rgba(2, 3, 10, 1)),
+          var(--page-bg);
+      }
+
+      body.theme-gaming-neon .title {
+        text-shadow:
+          0 0 calc(14px * var(--ui-scale)) rgba(34, 211, 238, 0.12),
+          0 calc(2px * var(--ui-scale)) calc(18px * var(--ui-scale)) rgba(168, 85, 247, 0.14);
+      }
+
+      body.theme-gaming-neon .row {
+        border-radius: calc(20px * var(--ui-scale));
+        border-color: color-mix(in srgb, var(--tier-accent) 62%, rgba(165, 180, 252, 0.24));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.05),
+          0 0 0 1px rgba(34, 211, 238, 0.04),
+          0 calc(14px * var(--ui-scale)) calc(30px * var(--ui-scale)) rgba(0, 0, 0, 0.28),
+          0 0 calc(28px * var(--ui-scale)) color-mix(in srgb, var(--tier-accent) 24%, rgba(34, 211, 238, 0.12));
+        background:
+          linear-gradient(90deg, color-mix(in srgb, var(--tier-accent) 24%, rgba(20, 18, 46, 0.96)) 0%, color-mix(in srgb, var(--tier-accent) 9%, rgba(12, 10, 28, 0.94)) 52%, rgba(4, 6, 18, 0.98) 100%);
+      }
+
+      body.theme-gaming-neon .tier-label {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+          color-mix(in srgb, var(--tier-accent) 32%, rgba(20, 18, 46, 0.35));
+      }
+
+      body.theme-gaming-neon .tier-item {
+        border-color: rgba(165, 180, 252, 0.22);
+        background:
+          linear-gradient(180deg, rgba(99, 102, 241, 0.12), rgba(34, 211, 238, 0.04)),
+          rgba(15, 23, 42, 0.6);
+      }
+
+      .row--compact .tier-label,
+      .row--dense .tier-label {
+        gap: 4px;
+      }
+
+      .row--compact .tier-key,
+      .row--dense .tier-key {
+        font-size: calc(38px * var(--ui-scale));
+      }
+    </style>
+  </head>
+  <body class="theme-__THEME__">
+    <main class="frame">
+      <section class="board">
+        <header class="header">
+          <h1 class="title">__TITLE__</h1>
+          __SUBTITLE__
+        </header>
+        <section class="rows">
+          __ROWS__
+        </section>
+        __FOOTER__
+        __WATERMARK__
+      </section>
+    </main>
+  </body>
+</html>

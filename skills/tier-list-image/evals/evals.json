@@ -1,0 +1,35 @@
+{
+  "skill_name": "tier-list-image",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make me a 4:5 tier-list image ranking AI coding tools. S tier: Codex, Claude Code. A tier: Cursor, Windsurf. B tier: Copilot. Use the editorial theme and save the image locally.",
+      "expected_output": "A 4:5 PNG is generated locally from an inferred tier-list spec with the requested ranking preserved.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Turn this into a square tier-list graphic for movie snacks: S popcorn, nachos. A pretzel bites, peanut M&Ms. B gummy bears. Make it feel playful rather than corporate.",
+      "expected_output": "A square PNG is generated locally with the tier ordering preserved and a lighter, more playful treatment than the default editorial case.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Make a 4:5 tier-list image of programming languages. Put Python and TypeScript in A, Go and Rust in B, and PHP in C. Keep it clean and readable for social sharing.",
+      "expected_output": "A 4:5 PNG is generated locally from a partially specified request, with missing title and tier structure inferred clearly.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Make a 16:9 editorial tier-list image titled \"Best Languages for Human To Code In\". Subtitle: \"The compiler is now the LLM\". S: English. A: Python, TypeScript. B: Rust, Go, SQL. C: Java, C#, Bash. D: C++, PHP, Ruby. F: COBOL, Assembly. Save the image locally.",
+      "expected_output": "A 16:9 PNG is generated locally from a fully specified request using the exact tier ordering and title supplied by the user.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Make a 4:5 tier-list image ranking data and document formats for AI agents. Keep short descriptions on each item and make sure crowded tiers still stay readable.",
+      "expected_output": "A 4:5 PNG is generated locally with multiple crowded tiers, readable wrapped rows, and descriptions preserved where space allows.",
+      "files": []
+    }
+  ]
+}
