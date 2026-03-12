@@ -73,48 +73,6 @@ First install the skill (see above). Then prompt your agent:
 Use inkframe to convert markdown to image
 ```
 
-### Tier-list image skill
-
-Install just the tier-list skill:
-
-```bash
-npx skills add https://github.com/ericjy/inkframe/skills --skill tier-list-image
-```
-
-Requirements:
-
-- Node.js 18+
-- `agent-browser` installed and available on `PATH`
-- browser runtime installed for `agent-browser`
-
-Recommended setup:
-
-```bash
-npm install -g agent-browser
-agent-browser install
-```
-
-Then prompt your agent with a ranking request such as:
-
-```text
-Use the tier-list-image skill.
-
-Make a 4:5 editorial tier-list image titled "Best AI Coding Tools".
-S: Codex, Claude Code
-A: Cursor, Windsurf
-B: Copilot
-
-Save the output locally.
-```
-
-The skill will:
-
-1. convert the request into a tier-list spec JSON
-2. render HTML from that spec
-3. screenshot the HTML to a PNG using `agent-browser`
-
-It also supports custom tier vocabularies, including Chinese labels like `夯爆了 / 夯 / 顶级 / 人上人 / NPC / 拉完了`, and preserves the order exactly as provided.
-
 ## Using inkframe without agent
 
 ### 0. Preview in the browser
@@ -319,6 +277,48 @@ pnpm link --global
 export INKFRAME_API_KEY=your_api_key
 inkframe render --content "# Hello World"
 ```
+
+## Tier-list image skill
+
+Install just the tier-list skill:
+
+```bash
+npx skills add https://github.com/ericjy/inkframe/skills --skill tier-list-image
+```
+
+Requirements:
+
+- Node.js 18+
+- `agent-browser` installed and available on `PATH`
+- browser runtime installed for `agent-browser`
+
+Recommended setup:
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
+Then prompt your agent with a ranking request such as:
+
+```text
+Use the tier-list-image skill.
+
+Make a 4:5 editorial tier-list image titled "Best AI Coding Tools".
+S: Codex, Claude Code
+A: Cursor, Windsurf
+B: Copilot
+
+Save the output locally.
+```
+
+The skill will:
+
+1. convert the request into a tier-list spec JSON
+2. render HTML from that spec
+3. screenshot the HTML to a PNG using `agent-browser`
+
+It also supports custom tier vocabularies, including Chinese labels like `夯爆了 / 夯 / 顶级 / 人上人 / NPC / 拉完了`, and preserves the order exactly as provided.
 
 ## License
 
